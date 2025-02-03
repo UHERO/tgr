@@ -26,3 +26,9 @@ This package requires the following environment variables to be set
 Edit your `~/.Renviron` or create one using `usethis::edit_r_environ()`.
 TG_User should equal the username and TG_Key should equal the API Key
 needed to access Title Guarantee’s API.
+
+## How to use
+
+`tg()` accepts 2 string parameters: a start date and an end date of the
+form YYYY-MM-DD The date range cannot exceed 90 days.
+`data <- tg('2024-01-01', '2024-01-03')`
