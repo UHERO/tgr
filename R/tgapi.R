@@ -13,6 +13,15 @@ tgReq <- function(startDate, endDate) {
     resp_body_json()
 }
 
+#' GET data from TG API
+#'
+#' @param startDate A date string of the format YYYY-MM-DD
+#' @param endDate A date string of the format YYYY-MM-DD
+#'
+#' @returns A tibble of data retrieved from the API
+#' @export
+#'
+
 tg <- function(startDate, endDate) {
   json <- tgReq(startDate, endDate)
 
