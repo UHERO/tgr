@@ -108,7 +108,7 @@ make_request <- function(url, headers, attempts = 2) {
 #' @return Tibble with selected fields
 process_response <- function(json, selected_fields = NULL) {
   if (length(json) == 0) {
-    return(dplyr::tibble())
+    return(tibble())
   }
 
   # Create mapping functions based on data types
@@ -165,7 +165,7 @@ process_response <- function(json, selected_fields = NULL) {
   }
 
   # Create tibble from processed data
-  dplyr::as_tibble(processed_data)
+  as_tibble(processed_data)
 }
 
 #' GET data from TG API with enhanced features
@@ -271,5 +271,5 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
   }
 
   # Combine all results
-  dplyr::bind_rows(results)
+  bind_rows(results)
 }

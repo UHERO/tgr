@@ -2,18 +2,33 @@
 % Please edit documentation in R/tgapi.R
 \name{tg}
 \alias{tg}
-\title{GET data from TG API}
+\title{GET data from TG API with enhanced features}
 \usage{
-tg(startDate, endDate)
+tg(
+  startDate,
+  endDate,
+  tmk = NULL,
+  min_price = NULL,
+  max_price = NULL,
+  fields = NULL
+)
 }
 \arguments{
-\item{startDate}{A date string of the format YYYY-MM-DD}
+\item{startDate}{Start date (Date object or string in YYYY-MM-DD format)}
 
-\item{endDate}{A date string of the format YYYY-MM-DD}
+\item{endDate}{End date (Date object or string in YYYY-MM-DD format)}
+
+\item{tmk}{Optional TMK parameter}
+
+\item{min_price}{Optional minimum sales price}
+
+\item{max_price}{Optional maximum sales price}
+
+\item{fields}{Optional vector of field names to include}
 }
 \value{
-A tibble of data retrieved from the API
+Tibble containing API response data
 }
 \description{
-GET data from TG API
+GET data from TG API with enhanced features
 }
