@@ -30,8 +30,9 @@ needed to access Title Guarantee’s API.
 ## How to use
 
 `tg()` accepts the following paramters:  
-- `startDate`: **required** Date object or string in YYYY-MM-DD format -
-`endDate`: **required** Date object or string in YYYY-MM-DD format -
-`tmk`: *optional* Tax map key - `min_price`: *optional* Minimum sales
-price - `max_price`: *optional* Maximum sales price - `fields`:
-*optional* Vector of field names to include
+- `startDate`: **required** Date object or string in YYYY-MM-DD format  
+- `endDate`: **required** Date object or string in YYYY-MM-DD format  
+- `tmk`: *optional* Tax map key  
+- `min_price`: *optional* Minimum sales price  
+- `max_price`: *optional* Maximum sales price  
+- `fields`: *optional* Vector of field names to include
