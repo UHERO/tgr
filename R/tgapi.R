@@ -173,13 +173,13 @@ process_response <- function(json, selected_fields = NULL, tmk = NULL, min_price
   tibble_data <- as_tibble(processed_data)
 
   if (!is.null(tmk)) {
-    tibble_data <- filter(tibble_data, taxKey == tmk)
+    tibble_data <- filter(tibble_data, tibble_data$taxKey == tmk)
   }
   if (!is.null(min_price)) {
-    tibble_data <- filter(tibble_data, conveyanceAmount >= min_price)
+    tibble_data <- filter(tibble_data, tibble_data$conveyanceAmount >= min_price)
   }
   if (!is.null(max_price)) {
-    tibble_data <- filter(tibble_data, conveyanceAmount <= max_price)
+    tibble_data <- filter(tibble_data, tibble_data$conveyanceAmount <= max_price)
   }
   if (!is.null(selected_fields)) {
     tibble_data <- tibble_data %>% select(all_of(selected_fields))

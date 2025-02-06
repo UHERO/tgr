@@ -2,8 +2,12 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom dplyr %>%
+#' @importFrom dplyr all_of
 #' @importFrom dplyr as_tibble
 #' @importFrom dplyr bind_rows
+#' @importFrom dplyr filter
+#' @importFrom dplyr select
 #' @importFrom dplyr tibble
 #' @importFrom httr2 req_headers
 #' @importFrom httr2 req_perform
