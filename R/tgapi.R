@@ -85,12 +85,12 @@ make_request <- function(url, headers, attempts = 2) {
   for (i in 1:attempts) {
     tryCatch(
       {
-        response <- httr2::request(url) |>
-          httr2::req_headers(!!!headers) |>
-          httr2::req_user_agent("UHERO TG API R Package (https://uhero.hawaii.edu)") |>
-          httr2::req_perform()
+        response <- request(url) |>
+          req_headers(!!!headers) |>
+          req_user_agent("UHERO TG API R Package (https://uhero.hawaii.edu)") |>
+          req_perform()
 
-        return(httr2::resp_body_json(response))
+        return(resp_body_json(response))
       },
       error = function(e) {
         if (i == attempts) {
@@ -113,44 +113,44 @@ process_response <- function(json, selected_fields = NULL) {
 
   # Create mapping functions based on data types
   field_types <- list(
-    id = \(x) purrr::map_int(x, "id", .default = NA),
-    taxKey = \(x) purrr::map_chr(x, "taxKey", .default = NA),
-    recDate = \(x) purrr::map_chr(x, "recDate", .default = NA),
-    docType = \(x) purrr::map_chr(x, "docType", .default = NA),
-    firstPartyName = \(x) purrr::map_chr(x, "firstPartyName", .default = NA),
-    secondPartyName = \(x) purrr::map_chr(x, "secondPartyName", .default = NA),
-    conveyanceAmount = \(x) purrr::map_dbl(x, "conveyanceAmount", .default = NA),
-    considerationAmount = \(x) purrr::map_dbl(x, "considerationAmount", .default = NA),
-    condoName = \(x) purrr::map_chr(x, "condoName", .default = NA),
-    taxClass = \(x) purrr::map_chr(x, "taxClass", .default = NA),
-    transactionType = \(x) purrr::map_chr(x, "transactionType", .default = NA),
-    neighborhood = \(x) purrr::map_chr(x, "neighborhood", .default = NA),
-    region = \(x) purrr::map_chr(x, "region", .default = NA),
-    ownerName = \(x) purrr::map_chr(x, "ownerName", .default = NA),
-    lessee = \(x) purrr::map_chr(x, "lessee", .default = NA),
-    mailingAddress = \(x) purrr::map_chr(x, "mailingAddress", .default = NA),
-    mailingApartmentNo = \(x) purrr::map_chr(x, "mailingApartmentNo", .default = NA),
-    mailingCity = \(x) purrr::map_chr(x, "mailingCity", .default = NA),
-    mailingState = \(x) purrr::map_chr(x, "mailingState", .default = NA),
-    mailingZipCode = \(x) purrr::map_chr(x, "mailingZipCode", .default = NA),
-    mailingCountry = \(x) purrr::map_chr(x, "mailingCountry", .default = NA),
-    totalMarketValue = \(x) purrr::map_dbl(x, "totalMarketValue", .default = NA),
-    buildingMarketValue = \(x) purrr::map_dbl(x, "buildingMarketValue", .default = NA),
-    landMarketValue = \(x) purrr::map_dbl(x, "landMarketValue", .default = NA),
-    buildingValue = \(x) purrr::map_dbl(x, "buildingValue", .default = NA),
-    landValue = \(x) purrr::map_dbl(x, "landValue", .default = NA),
-    totalAssessedValue = \(x) purrr::map_dbl(x, "totalAssessedValue", .default = NA),
-    buildingExemption = \(x) purrr::map_dbl(x, "buildingExemption", .default = NA),
-    landExemption = \(x) purrr::map_dbl(x, "landExemption", .default = NA),
-    totalExemption = \(x) purrr::map_dbl(x, "totalExemption", .default = NA),
-    netValue = \(x) purrr::map_dbl(x, "netValue", .default = NA),
-    totalNetValue = \(x) purrr::map_dbl(x, "totalNetValue", .default = NA),
-    assessmentValues = \(x) purrr::map_chr(x, "assessmentValues", .default = NA),
-    propertyAddress = \(x) purrr::map_chr(x, "propertyAddress", .default = NA),
-    zoning = \(x) purrr::map_chr(x, "zoning", .default = NA),
-    propertyArea = \(x) purrr::map_chr(x, "propertyArea", .default = NA),
-    mortgageType = \(x) purrr::map_chr(x, "mortgageType", .default = NA),
-    maturityDate = \(x) purrr::map_chr(x, "maturityDate", .default = NA)
+    id = \(x) map_int(x, "id", .default = NA),
+    taxKey = \(x) map_chr(x, "taxKey", .default = NA),
+    recDate = \(x) map_chr(x, "recDate", .default = NA),
+    docType = \(x) map_chr(x, "docType", .default = NA),
+    firstPartyName = \(x) map_chr(x, "firstPartyName", .default = NA),
+    secondPartyName = \(x) map_chr(x, "secondPartyName", .default = NA),
+    conveyanceAmount = \(x) map_dbl(x, "conveyanceAmount", .default = NA),
+    considerationAmount = \(x) map_dbl(x, "considerationAmount", .default = NA),
+    condoName = \(x) map_chr(x, "condoName", .default = NA),
+    taxClass = \(x) map_chr(x, "taxClass", .default = NA),
+    transactionType = \(x) map_chr(x, "transactionType", .default = NA),
+    neighborhood = \(x) map_chr(x, "neighborhood", .default = NA),
+    region = \(x) map_chr(x, "region", .default = NA),
+    ownerName = \(x) map_chr(x, "ownerName", .default = NA),
+    lessee = \(x) map_chr(x, "lessee", .default = NA),
+    mailingAddress = \(x) map_chr(x, "mailingAddress", .default = NA),
+    mailingApartmentNo = \(x) map_chr(x, "mailingApartmentNo", .default = NA),
+    mailingCity = \(x) map_chr(x, "mailingCity", .default = NA),
+    mailingState = \(x) map_chr(x, "mailingState", .default = NA),
+    mailingZipCode = \(x) map_chr(x, "mailingZipCode", .default = NA),
+    mailingCountry = \(x) map_chr(x, "mailingCountry", .default = NA),
+    totalMarketValue = \(x) map_dbl(x, "totalMarketValue", .default = NA),
+    buildingMarketValue = \(x) map_dbl(x, "buildingMarketValue", .default = NA),
+    landMarketValue = \(x) map_dbl(x, "landMarketValue", .default = NA),
+    buildingValue = \(x) map_dbl(x, "buildingValue", .default = NA),
+    landValue = \(x) map_dbl(x, "landValue", .default = NA),
+    totalAssessedValue = \(x) map_dbl(x, "totalAssessedValue", .default = NA),
+    buildingExemption = \(x) map_dbl(x, "buildingExemption", .default = NA),
+    landExemption = \(x) map_dbl(x, "landExemption", .default = NA),
+    totalExemption = \(x) map_dbl(x, "totalExemption", .default = NA),
+    netValue = \(x) map_dbl(x, "netValue", .default = NA),
+    totalNetValue = \(x) map_dbl(x, "totalNetValue", .default = NA),
+    assessmentValues = \(x) map_chr(x, "assessmentValues", .default = NA),
+    propertyAddress = \(x) map_chr(x, "propertyAddress", .default = NA),
+    zoning = \(x) map_chr(x, "zoning", .default = NA),
+    propertyArea = \(x) map_chr(x, "propertyArea", .default = NA),
+    mortgageType = \(x) map_chr(x, "mortgageType", .default = NA),
+    maturityDate = \(x) map_chr(x, "maturityDate", .default = NA)
   )
 
   # Select fields to process
@@ -227,9 +227,9 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
     if (!is.null(prices$min_price)) query_params$salesPriceGreaterThanEqual <- prices$min_price
     if (!is.null(prices$max_price)) query_params$salesPriceLesserThanEqual <- prices$max_price
 
-    req <- httr2::request(url)
+    req <- request(url)
     if (length(query_params) > 0) {
-      req <- httr2::req_url_query(req, !!!query_params)
+      req <- req_url_query(req, !!!query_params)
     }
 
     tryCatch(
@@ -258,9 +258,9 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
             small_start, small_end
           )
 
-          req <- httr2::request(url)
+          req <-request(url)
           if (length(query_params) > 0) {
-            req <- httr2::req_url_query(req, !!!query_params)
+            req <- req_url_query(req, !!!query_params)
           }
 
           batch_data <- make_request(req, headers)
