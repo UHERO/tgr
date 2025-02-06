@@ -6,7 +6,11 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of uherotgr is to …
+This package interfaces with the API provided by Title Guaranty. It returns a list of transaction records. Contact wood2@hawaii.edu for the API Key and Username. The API is only accessible from UH or the UH VPN.
+
+### TG Resources
+Docs: https://dataservices.tghawaii.com/swagger/index.html
+api url: https://dataservices.tghawaii.com/api/UHero/GetData/
 
 ## Installation
 
