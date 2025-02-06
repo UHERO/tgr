@@ -105,8 +105,11 @@ make_request <- function(url, headers, attempts = 2) {
 #' Process JSON response into tibble
 #' @param json JSON response
 #' @param selected_fields Fields to include in output
+#' @param tmk Tax map key
+#' @param min_price Minimum sales price
+#' @param max_price Maximum sales price
 #' @return Tibble with selected fields
-process_response <- function(json, selected_fields = NULL) {
+process_response <- function(json, selected_fields = NULL, tmk = NULL, min_price = NULL, max_price = NULL) {
   if (length(json) == 0) {
     return(tibble())
   }
@@ -153,19 +156,35 @@ process_response <- function(json, selected_fields = NULL) {
     maturityDate = \(x) map_chr(x, "maturityDate", .default = NA)
   )
 
+  all_fields <- names(field_types)
+
   # Select fields to process
   if (is.null(selected_fields)) {
-    selected_fields <- names(field_types)
+    selected_fields <- all_fields
   }
 
   # Create a list of processed columns
   processed_data <- list()
-  for (field in selected_fields) {
+  for (field in all_fields) {
     processed_data[[field]] <- field_types[[field]](json)
   }
 
   # Create tibble from processed data
-  as_tibble(processed_data)
+  tibble_data <- as_tibble(processed_data)
+
+  if (!is.null(tmk)) {
+    tibble_data <- filter(tibble_data, taxKey == tmk)
+  }
+  if (!is.null(min_price)) {
+    tibble_data <- filter(tibble_data, conveyanceAmount >= min_price)
+  }
+  if (!is.null(max_price)) {
+    tibble_data <- filter(tibble_data, conveyanceAmount <= max_price)
+  }
+  if (!is.null(selected_fields)) {
+    tibble_data <- tibble_data %>% select(all_of(selected_fields))
+  }
+  tibble_data
 }
 
 #' GET data from TG API with enhanced features
@@ -221,21 +240,13 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
       batch_start, batch_end
     )
 
-    # Add query parameters if provided
-    query_params <- list()
-    if (!is.null(tmk)) query_params$tmk <- tmk
-    if (!is.null(prices$min_price)) query_params$salesPriceGreaterThanEqual <- prices$min_price
-    if (!is.null(prices$max_price)) query_params$salesPriceLesserThanEqual <- prices$max_price
-
-    req <- request(url)
-    if (length(query_params) > 0) {
-      req <- req_url_query(req, !!!query_params)
-    }
+    req <- httr2::request(url)
 
     tryCatch(
       {
         batch_data <- make_request(url, headers)
-        results[[i]] <- process_response(batch_data, fields)
+        results[[i]] <- process_response(batch_data, fields, tmk,
+                                         prices$min_price, prices$max_price)
       },
       error = function(e) {
         # If batch fails, try with smaller window
@@ -258,18 +269,16 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
             small_start, small_end
           )
 
-          req <-request(url)
-          if (length(query_params) > 0) {
-            req <- req_url_query(req, !!!query_params)
-          }
+          req <- httr2::request(url)
 
           batch_data <- make_request(req, headers)
-          results[[length(results) + 1]] <- process_response(batch_data, fields)
+          results[[length(results) + 1]] <- process_response(batch_data, fields,
+                                                             tmk, prices$min_price,
+                                                             prices$max_price)
         }
       }
     )
   }
 
-  # Combine all results
-  bind_rows(results)
+  dplyr::bind_rows(results)
 }

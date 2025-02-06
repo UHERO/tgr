@@ -54,7 +54,7 @@ print(sprintf("Test 3: Found %d transactions within price range", nrow(result3))
 result4 <- tg(
   startDate = "2024-01-10",
   endDate = "2024-01-14",
-  tmk = "1110300590000"
+  tmk = "1110040760000"
 )
 expect_named(result4, all_fields, ignore.order = TRUE)
 print(sprintf("Test 4: Found %d transactions with given tmk", nrow(result4)))

@@ -4,12 +4,24 @@
 \alias{process_response}
 \title{Process JSON response into tibble}
 \usage{
-process_response(json, selected_fields = NULL)
+process_response(
+  json,
+  selected_fields = NULL,
+  tmk = NULL,
+  min_price = NULL,
+  max_price = NULL
+)
 }
 \arguments{
 \item{json}{JSON response}
 
 \item{selected_fields}{Fields to include in output}
+
+\item{tmk}{Tax map key}
+
+\item{min_price}{Minimum sales price}
+
+\item{max_price}{Maximum sales price}
 }
 \value{
 Tibble with selected fields
