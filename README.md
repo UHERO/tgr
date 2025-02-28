@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-This package interfaces with the API provided by Title Guaranty. It returns a list of transaction records. Contact wood2@hawaii.edu for the API Key and Username. The API is only accessible from UH or the UH VPN.
+This package interfaces with the API provided by Title Guaranty. It returns a list of transaction records. Contact wood2@hawaii.edu for the API Key and Username. The API is only accessible from while on the UH network or the UH VPN.
 
 ### TG Resources
 Docs: https://dataservices.tghawaii.com/swagger/index.html
