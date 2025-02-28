@@ -10,6 +10,7 @@ This package interfaces with the API provided by Title Guaranty. It returns a li
 
 ### TG Resources
 Docs: https://dataservices.tghawaii.com/swagger/index.html
+
 api url: https://dataservices.tghawaii.com/api/UHero/GetData/
 
 ## Installation
