@@ -12,12 +12,6 @@ This package interfaces with the API provided by Title Guaranty. It returns a li
 Docs: https://dataservices.tghawaii.com/swagger/index.html
 api url: https://dataservices.tghawaii.com/api/UHero/GetData/
 
-Our contacts for this API at TG are:
-
-John Tomoso <jtomoso@tghawaii.com>
-
-Jason Aldridge <Jason.Aldridge@fnf.com>;
-
 ## Installation
 
 You can install the development version of uherotgr from
