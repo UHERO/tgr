@@ -91,9 +91,11 @@ validate_fields <- function(fields) {
 #' @param url API endpoint
 #' @param headers Request headers
 #' @param attempts Maximum number of retry attempts
+#' @param sleep Delay between batched requests. Defaults to 0.6s
 #' @return JSON response
-make_request <- function(url, headers, attempts = 2) {
+make_request <- function(url, headers, attempts = 2, sleep = 0.5) {
   for (i in 1:attempts) {
+    Sys.sleep(sleep)
     tryCatch(
       {
         response <- request(url) |>
@@ -217,9 +219,10 @@ process_response <- function(json, selected_fields = NULL, tmk = NULL, min_price
 #' @param min_price Optional minimum sales price
 #' @param max_price Optional maximum sales price
 #' @param fields Optional vector of field names to include
+#' @param sleep How long to sleep between batched requests. Defaults to 0.5s
 #' @return Tibble containing API response data
 #' @export
-tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NULL, fields = NULL) {
+tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NULL, fields = NULL, sleep = .5) {
   # Validate inputs
   startDate <- validate_date(startDate)
   endDate <- validate_date(endDate)
@@ -295,7 +298,7 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
 
           req <- httr2::request(url)
 
-          batch_data <- make_request(req, headers)
+          batch_data <- make_request(req, headers, sleep)
           results[[length(results) + 1]] <- process_response(
             batch_data, fields,
             tmk, prices$min_price,
