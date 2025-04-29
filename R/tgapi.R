@@ -65,7 +65,18 @@ validate_fields <- function(fields) {
     "landMarketValue", "buildingValue", "landValue", "totalAssessedValue",
     "buildingExemption", "landExemption", "totalExemption", "netValue",
     "totalNetValue", "assessmentValues", "propertyAddress", "zoning",
-    "propertyArea", "mortgageType", "maturityDate"
+    "propertyArea", "mortgageType", "maturityDate",
+    "currentTotalMarketValue",
+    "currentBuildingMarketValue",
+    "currentLandMarketValue",
+    "currentBuildingValue",
+    "currentLandValue",
+    "currentTotalAssessedValue",
+    "currentBuildingExemption",
+    "currentLandExemption",
+    "currentTotalExemption",
+    "currentNetValue",
+    "currentTotalNetValue"
   )
 
   invalid_fields <- setdiff(fields, valid_fields)
@@ -153,7 +164,18 @@ process_response <- function(json, selected_fields = NULL, tmk = NULL, min_price
     zoning = \(x) map_chr(x, "zoning", .default = NA),
     propertyArea = \(x) map_chr(x, "propertyArea", .default = NA),
     mortgageType = \(x) map_chr(x, "mortgageType", .default = NA),
-    maturityDate = \(x) map_chr(x, "maturityDate", .default = NA)
+    maturityDate = \(x) map_chr(x, "maturityDate", .default = NA),
+    currentTotalMarketValue = \(x) map_chr(x, "currentTotalMarketValue", default = NA),
+    currentBuildingMarketValue = \(x) map_chr(x, "currentBuildingMarketValue", default = NA),
+    currentLandMarketValue = \(x) map_chr(x, "currentLandMarketValue", default = NA),
+    currentBuildingValue = \(x) map_chr(x, "currentBuildingValue", default = NA),
+    currentLandValue = \(x) map_chr(x, "currentLandValue", default = NA),
+    currentTotalAssessedValue = \(x) map_chr(x, "currentTotalAssessedValue", default = NA),
+    currentBuildingExemption = \(x) map_chr(x, "currentBuildingExemption", default = NA),
+    currentLandExemption = \(x) map_chr(x, "currentLandExemption", default = NA),
+    currentTotalExemption = \(x) map_chr(x, "currentTotalExemption", default = NA),
+    currentNetValue = \(x) map_chr(x, "currentNetValue", default = NA),
+    currentTotalNetValue = \(x) map_chr(x, "currentTotalNetValue", default = NA)
   )
 
   all_fields <- names(field_types)
@@ -245,8 +267,10 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
     tryCatch(
       {
         batch_data <- make_request(url, headers)
-        results[[i]] <- process_response(batch_data, fields, tmk,
-                                         prices$min_price, prices$max_price)
+        results[[i]] <- process_response(
+          batch_data, fields, tmk,
+          prices$min_price, prices$max_price
+        )
       },
       error = function(e) {
         # If batch fails, try with smaller window
@@ -272,9 +296,11 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
           req <- httr2::request(url)
 
           batch_data <- make_request(req, headers)
-          results[[length(results) + 1]] <- process_response(batch_data, fields,
-                                                             tmk, prices$min_price,
-                                                             prices$max_price)
+          results[[length(results) + 1]] <- process_response(
+            batch_data, fields,
+            tmk, prices$min_price,
+            prices$max_price
+          )
         }
       }
     )
