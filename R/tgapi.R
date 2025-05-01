@@ -247,13 +247,10 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
     accept = "application/json"
   )
 
-  # Generate date sequence for weekly batches
-  dates <- seq(as.Date(startDate), as.Date(endDate), by = "7 days")
-  if (as.Date(endDate) > utils::tail(dates, 1)) {
-    dates <- c(dates, as.Date(endDate))
-  }
+  # Generate date sequence for daily batches
+  dates <- seq(as.Date(startDate), as.Date(endDate), by = "1 day")
 
-  # Process batches
+  # Process daily batches
   results <- list()
 
   for (i in 1:(length(dates) - 1)) {
@@ -265,46 +262,44 @@ tg <- function(startDate, endDate, tmk = NULL, min_price = NULL, max_price = NUL
       batch_start, batch_end
     )
 
-    req <- httr2::request(url)
-
     tryCatch(
       {
-        batch_data <- make_request(url, headers)
+        batch_data <- make_request(url, headers, sleep = sleep)
         results[[i]] <- process_response(
           batch_data, fields, tmk,
           prices$min_price, prices$max_price
         )
       },
       error = function(e) {
-        # If batch fails, try with smaller window
         warning(sprintf(
-          "Weekly batch failed, attempting 3-day windows for %s to %s",
-          batch_start, batch_end
+          "Daily batch failed for %s to %s: %s",
+          batch_start, batch_end, e$message
         ))
+      }
+    )
+  }
 
-        smaller_dates <- seq(as.Date(batch_start), as.Date(batch_end), by = "3 days")
-        if (as.Date(batch_end) > utils::tail(smaller_dates, 1)) {
-          smaller_dates <- c(smaller_dates, as.Date(batch_end))
-        }
+  # Check if we need to include the end date itself
+  if (as.Date(endDate) == utils::tail(dates, 1)) {
+    last_date <- format(as.Date(endDate), "%Y-%m-%d")
+    url <- sprintf(
+      "https://dataservices.tghawaii.com/api/UHero/GetData/%s/%s",
+      last_date, last_date
+    )
 
-        for (j in 1:(length(smaller_dates) - 1)) {
-          small_start <- format(smaller_dates[j], "%Y-%m-%d")
-          small_end <- format(smaller_dates[j + 1], "%Y-%m-%d")
-
-          url <- sprintf(
-            "https://dataservices.tghawaii.com/api/UHero/GetData/%s/%s",
-            small_start, small_end
-          )
-
-          req <- httr2::request(url)
-
-          batch_data <- make_request(req, headers, sleep)
-          results[[length(results) + 1]] <- process_response(
-            batch_data, fields,
-            tmk, prices$min_price,
-            prices$max_price
-          )
-        }
+    tryCatch(
+      {
+        batch_data <- make_request(url, headers, sleep = sleep)
+        results[[length(results) + 1]] <- process_response(
+          batch_data, fields, tmk,
+          prices$min_price, prices$max_price
+        )
+      },
+      error = function(e) {
+        warning(sprintf(
+          "Daily batch failed for %s: %s",
+          last_date, e$message
+        ))
       }
     )
   }
